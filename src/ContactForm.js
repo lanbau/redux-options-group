@@ -1,30 +1,31 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
+import { reduxForm } from "redux-form";
+import CheckboxGroup from "./CheckboxGroup";
 
-let ContactForm = props => {
-  const { handleSubmit } = props;
+const ContactForm = props => {
+  // these props comes from reduxForm
+  const { handleSubmit, pristine, reset, submitting } = props;
+  const options = [
+    { label: "English", value: "en" },
+    { label: "繁體中文", value: "zh-TW" },
+    { label: "Tibetan", value: "bo" }
+  ];
+
   return (
     <form onSubmit={handleSubmit}>
+      <CheckboxGroup name="langs" options={options} />
       <div>
-        <label htmlFor="firstName">First Name</label>
-        <Field name="firstName" component="input" type="text" />
+        <button type="submit" disabled={submitting}>
+          Submit
+        </button>
+        <button type="button" disabled={pristine || submitting} onClick={reset}>
+          Clear Values
+        </button>
       </div>
-      <div>
-        <label htmlFor="lastName">Last Name</label>
-        <Field name="lastName" component="input" type="text" />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <Field name="email" component="input" type="email" />
-      </div>
-      <button type="submit">Submit</button>
     </form>
   );
 };
 
-ContactForm = reduxForm({
-  // a unique name for the form
-  form: "contact"
+export default reduxForm({
+  form: "fieldArrays" // a unique identifier for this form
 })(ContactForm);
-
-export default ContactForm;
